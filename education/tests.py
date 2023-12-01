@@ -23,8 +23,103 @@ class ModuleTestCase(APITestCase):
             reverse('education:module-list')
         )
 
-        print(response.json)
         self.assertEquals(
             response.status_code,
             status.HTTP_200_OK
+        )
+        self.assertEquals(
+            response.json(),
+            [{'id': 1, 'title': 'test', 'description': ''}])
+
+    def test_module_create(self):
+        """
+        Тест создания модуля
+        """
+
+        data = {
+            'title': 'test2',
+            'description': 'test2',
+        }
+
+        response = self.client.post(
+            reverse('education:module-create'),
+            data=data
+        )
+
+        self.assertEquals(
+            response.status_code,
+            status.HTTP_201_CREATED
+        )
+
+        self.assertEquals(
+            Module.objects.all().count(),
+            2
+        )
+
+    def test_module_create_validation_error(self):
+        """
+        Тест ошибки валидации
+        """
+
+        data = {
+            'title': '#@*-^',
+            'description': 'test3'
+        }
+
+        response = self.client.post(
+            reverse('education:module-create'),
+            data=data
+        )
+
+        self.assertEquals(
+            response.status_code,
+            status.HTTP_400_BAD_REQUEST
+        )
+
+
+class ModuleTestCase2(APITestCase):
+    """
+    Тестирование апдейта
+    """
+
+    def setUp(self):
+        self.lesson = Module.objects.create(
+            title='test',
+            description='test'
+        )
+
+    def test_module_update(self):
+        url = reverse('education:module-update', kwargs={'pk': self.lesson.pk})
+
+        data = {
+            'title': self.lesson.title,
+            'description': 'update_test'
+        }
+
+        response = self.client.put(url, data)
+
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+
+        self.assertEquals(
+            response.json(),
+            {'id': 1, 'title': 'test', 'description': 'update_test'}
+
+        )
+
+    def test_module_delete(self):
+        """
+        Тестирование удаления
+        """
+
+        url = reverse('education:module-delete', kwargs={'pk': self.lesson.pk})
+
+        response = self.client.delete(url)
+
+        self.assertEquals(
+            response.status_code,
+            status.HTTP_204_NO_CONTENT
+        )
+
+        self.assertFalse(
+            Module.objects.all().exists(),
         )
