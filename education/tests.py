@@ -89,10 +89,10 @@ class ModuleTestCase2(APITestCase):
         )
 
     def test_module_update(self):
-        url = reverse('education:module-update', kwargs={'pk': self.lesson.pk})
+        url = reverse('education:module-update', kwargs={'pk': self.module.pk})
 
         data = {
-            'title': self.lesson.title,
+            'title': self.module.title,
             'description': 'update_test'
         }
 
@@ -103,7 +103,6 @@ class ModuleTestCase2(APITestCase):
         self.assertEquals(
             response.json(),
             {'id': 1, 'title': 'test', 'description': 'update_test'}
-
         )
 
     def test_module_delete(self):
