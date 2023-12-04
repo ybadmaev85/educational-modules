@@ -103,7 +103,7 @@ class ModuleTestCase2(APITestCase):
 
         self.assertEquals(
             response.json(),
-            {'id': 1, 'title': 'test', 'description': 'update_test'}
+            {'id': self.module.id, 'title': 'test', 'description': 'update_test'}
         )
 
     def test_module_delete(self):
