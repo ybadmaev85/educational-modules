@@ -78,17 +78,18 @@ class ModuleTestCase(APITestCase):
 
 
 class ModuleTestCase2(APITestCase):
-    """
-    Тестирование апдейта
-    """
 
     def setUp(self):
-        self.lesson = Module.objects.create(
+        self.module = Module.objects.create(
             title='test',
             description='test'
         )
 
     def test_module_update(self):
+        """
+        Тестирование апдейта
+        """
+
         url = reverse('education:module-update', kwargs={'pk': self.module.pk})
 
         data = {
@@ -110,7 +111,7 @@ class ModuleTestCase2(APITestCase):
         Тестирование удаления
         """
 
-        url = reverse('education:module-delete', kwargs={'pk': self.lesson.pk})
+        url = reverse('education:module-delete', kwargs={'pk': self.module.pk})
 
         response = self.client.delete(url)
 
